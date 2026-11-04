@@ -24,3 +24,9 @@ See [docs/SCOPE.md](docs/SCOPE.md)
 
 ## Running locally
 Setup instructions coming soon.
+
+## Roadmap
+- [x] Week 1: Project scope and repository setup
+- [ ] Weeks 2–5: Database design, Express API and CRUD endpoints
+- [ ] Weeks 6–8: React frontend
+- [ ] Weeks 9–12: Authentication, tests and deployment
