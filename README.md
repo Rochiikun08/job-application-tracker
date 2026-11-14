@@ -30,3 +30,13 @@ Setup instructions coming soon.
 - [ ] Weeks 2–5: Database design, Express API and CRUD endpoints
 - [ ] Weeks 6–8: React frontend
 - [ ] Weeks 9–12: Authentication, tests and deployment
+
+## Database design
+
+![ER diagram](docs/er-diagram.png)
+
+Key decisions:
+- Current status is stored on `applications` and every change is logged in `status_history`
+- Status values are limited to a fixed set using CHECK constraints
+- Deleting an application cascades to its history and interviews
+- Each user can't have two applications for the same company and role
