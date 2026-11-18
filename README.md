@@ -23,7 +23,13 @@ React + TypeScript · Node.js + Express · PostgreSQL
 See [docs/SCOPE.md](docs/SCOPE.md)
 
 ## Running locally
-Setup instructions coming soon.
+
+1. Create the database and run `server/db/schema.sql`
+2. Optional sample data: run `server/db/seed.sql`
+3. `cd server && cp .env.example .env`, then set your database password
+4. `npm install`
+5. `npm run dev`
+6. Visit http://localhost:3000/health/db
 
 ## Roadmap
 - [x] Week 1: Project scope and repository setup
