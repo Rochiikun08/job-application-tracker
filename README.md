@@ -3,7 +3,7 @@
 A full-stack web app for tracking job applications, interview stages and
 follow-ups.
 
-**Status:** 🚧 In development (Week 1: planning)
+**Status:** 🚧 In development (Week 4: building the REST API)
 
 ## Why I'm building this
 Applying for internships means juggling dozens of applications across
