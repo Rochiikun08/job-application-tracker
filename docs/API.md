@@ -192,7 +192,7 @@ Every error returns JSON in this shape:
 
 ## Build order and progress
 
-- [ ] GET `/applications`
+- [x] GET `/applications`
 - [ ] GET `/applications/:id`
 - [ ] POST `/applications`
 - [ ] PATCH `/applications/:id`
