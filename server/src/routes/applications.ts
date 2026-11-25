@@ -1,3 +1,4 @@
+import { parseId } from "../validation.js";
 import { Router } from "express";
 import { pool } from "../db.js";
 import { getCurrentUserId } from "../currentUser.js";
@@ -32,4 +33,26 @@ applicationsRouter.get("/", async (req, res) => {
 
   const result = await pool.query<ApplicationRow>(sql, params);
   res.json(result.rows.map(toApplication));
+});
+
+// GET /applications/:id
+applicationsRouter.get("/:id", async (req, res) => {
+  const id = parseId(req.params.id);
+  if (id === null) {
+    res.status(400).json({ message: "id must be a positive integer" });
+    return;
+  }
+
+  const userId = await getCurrentUserId();
+  const result = await pool.query<ApplicationRow>(
+    `SELECT ${COLUMNS} FROM applications WHERE id = $1 AND user_id = $2`,
+    [id, userId],
+  );
+
+  const row = result.rows[0];
+  if (!row) {
+    res.status(404).json({ message: "Application not found" });
+    return;
+  }
+  res.json(toApplication(row));
 });
