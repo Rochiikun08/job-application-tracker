@@ -4,6 +4,8 @@ import { pool } from "../db.js";
 import { getCurrentUserId } from "../currentUser.js";
 import { toApplication } from "../mappers.js";
 import { STATUSES, type ApplicationRow, type Status } from "../types.js";
+import { validateNewApplication } from "../validation.js";
+import { isUniqueViolation } from "../dbErrors.js";
 
 export const applicationsRouter = Router();
 
@@ -55,4 +57,38 @@ applicationsRouter.get("/:id", async (req, res) => {
     return;
   }
   res.json(toApplication(row));
+});
+
+// POST /applications
+applicationsRouter.post("/", async (req, res) => {
+  const result = validateNewApplication(req.body);
+  if (!result.ok) {
+    res.status(400).json({ message: "Validation failed", errors: result.errors });
+    return;
+  }
+  const a = result.value;
+  const userId = await getCurrentUserId();
+
+  try {
+    const inserted = await pool.query<ApplicationRow>(
+      `INSERT INTO applications
+         (user_id, company, role, status, job_url, location, source,
+          date_applied, follow_up_on, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       RETURNING ${COLUMNS}`,
+      [userId, a.company, a.role, a.status, a.jobUrl, a.location,
+       a.source, a.dateApplied, a.followUpOn, a.notes],
+    );
+    const row = inserted.rows[0];
+    if (!row) throw new Error("Insert returned no row");
+    res.status(201).json(toApplication(row));
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      res.status(409).json({
+        message: "You already have an application for this company and role",
+      });
+      return;
+    }
+    throw err;
+  }
 });
