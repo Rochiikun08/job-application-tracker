@@ -1,6 +1,7 @@
 import express from "express";
 import { pool } from "./db.js";
 import { applicationsRouter } from "./routes/applications.js";
+import { errorHandler, notFoundHandler } from "./errorHandlers.js";
 
 export const app = express();
 app.use(express.json());
@@ -24,3 +25,7 @@ app.get("/health/db", async (_req, res) => {
 });
 
 app.use("/applications", applicationsRouter);
+
+// These two must come last, in this order
+app.use(notFoundHandler);
+app.use(errorHandler);
