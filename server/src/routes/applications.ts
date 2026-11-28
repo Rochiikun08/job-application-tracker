@@ -159,3 +159,24 @@ applicationsRouter.patch("/:id", async (req, res) => {
     throw err;
   }
 });
+
+// DELETE /applications/:id
+applicationsRouter.delete("/:id", async (req, res) => {
+  const id = parseId(req.params.id);
+  if (id === null) {
+    res.status(400).json({ message: "id must be a positive integer" });
+    return;
+  }
+
+  const userId = await getCurrentUserId();
+  const result = await pool.query(
+    "DELETE FROM applications WHERE id = $1 AND user_id = $2",
+    [id, userId],
+  );
+
+  if (!result.rowCount) {
+    res.status(404).json({ message: "Application not found" });
+    return;
+  }
+  res.status(204).send();
+});
