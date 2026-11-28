@@ -196,6 +196,6 @@ Every error returns JSON in this shape:
 - [x] GET `/applications/:id`
 - [x] POST `/applications`
 - [x] PATCH `/applications/:id`
-- [ ] DELETE `/applications/:id`
+- [x] DELETE `/applications/:id`
 
 For each endpoint: build it, test success and error cases in Postman, save the requests in the collection, then commit.
